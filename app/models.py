@@ -8,9 +8,6 @@ class Access(db.Model):
 	role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
 	role = db.relationship("Role")
 
-	company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
-	company = db.relationship('Company',back_populates="users",foreign_keys=company_id)
-
 	def __repr__(self):
 		return '<Access %s,%s,%s>' % (self.user_id,self.role_id,self.company_id)
 
@@ -24,10 +21,8 @@ class User(db.Model):
 	image = db.Column(db.String(1024))
 
 	access = db.relationship('Access',back_populates="user")
-	companies = db.relationship('Company',back_populates="owner")
 	sessions = db.relationship('Session',back_populates="user")
-	orders = db.relationship('Order',back_populates="user")
-
+	
 	def __repr__(self):
 		return '<User %s,%s,%s,%s,%s>' % (self.username,self.fullname,self.email,self.password,self.created_date)
 
@@ -49,9 +44,6 @@ class Session(db.Model):
 
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	user = db.relationship('User',back_populates="sessions",foreign_keys=user_id)
-
-	company_id = db.Column(db.Integer, db.ForeignKey('company.id'))
-	company = db.relationship('Company',back_populates="sessions")
 
 	def __repr__(self):
 		return '<Session %s,%s,%s,%s,%s>' % (self.session_,self.created_date,self.active,self.user_id,self.company_id)
